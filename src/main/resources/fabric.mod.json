@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "id": "more_movement_options",
+  "version": "${version}",
+
+  "name": "Example Mod",
+  "description": "This is an example description! Tell everyone what your mod is about!",
+  "authors": [
+    "Me!"
+  ],
+  "contact": {
+    "homepage": "https://fabricmc.net/",
+    "sources": "https://github.com/FabricMC/fabric-example-mod"
+  },
+
+  "license": "MIT License",
+  "icon": "assets/more_movement_options/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "net.yeyito.more_movement_options.MoreMovementOptions"
+    ],
+    "client": [
+      "net.yeyito.more_movement_options.MoreMovementOptionsClient"
+    ]
+  },
+  "mixins": [
+    "more_movement_options.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.14.9",
+    "fabric-api": "*",
+    "minecraft": "~1.19",
+    "java": ">=17"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}
