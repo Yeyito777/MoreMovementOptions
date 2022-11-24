@@ -3,5 +3,6 @@
   "key.more_movement_options.dash_left": "Dash Left Key",
   "key.more_movement_options.dash_right": "Dash Right Key",
   "key.more_movement_options.dash_forward": "Dash Forward Key",
-  "key.more_movement_options.dash_backward": "Dash Backward Key"
+  "key.more_movement_options.dash_backward": "Dash Backward Key",
+  "death.attack.exhaustion": ""
 }

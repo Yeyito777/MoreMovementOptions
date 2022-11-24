@@ -1,4 +1,4 @@
-package net.yeyito.event;
+package net.yeyito.event.client;
 
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.MinecraftClient;
@@ -13,7 +13,7 @@ import java.util.List;
 
 public class KeyboardInputEvent extends InputUtil {
     public static int tickCounter = 0;
-    public static int tickQuicknessAcceptance = 3; // The higher the number the more forgiving, it's in ticks.
+    public static int tickQuicknessAcceptance = 4; // The higher the number the more forgiving, it's in ticks.
 
     public static int[] Keys = {GLFW.GLFW_KEY_A, GLFW_KEY_D, GLFW.GLFW_KEY_W, GLFW_KEY_S}; // Lists the available keys
     public static List<Integer> KeysButItsAList = new ArrayList<>();
