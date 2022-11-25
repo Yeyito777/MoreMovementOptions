@@ -13,7 +13,7 @@ import java.util.List;
 
 public class KeyboardInputEvent extends InputUtil {
     public static int tickCounter = 0;
-    public static int tickQuicknessAcceptance = 4; // The higher the number the more forgiving, it's in ticks.
+    public static int tickQuicknessAcceptance = 5; // The higher the number the more forgiving, it's in ticks.
 
     public static int[] Keys = {GLFW.GLFW_KEY_A, GLFW_KEY_D, GLFW.GLFW_KEY_W, GLFW_KEY_S}; // Lists the available keys
     public static List<Integer> KeysButItsAList = new ArrayList<>();
@@ -23,10 +23,10 @@ public class KeyboardInputEvent extends InputUtil {
 
     public static void codeRanBeforeKeyUpdates(MinecraftClient client) {
         if (client != null) {
-            if (checkIfKeyIsPressedThisTick(GLFW_KEY_A) && getTickDifferenceToCurrentTick(LastTickKeyWasPressedReg.get(KeysButItsAList.indexOf(GLFW_KEY_A))) <= tickQuicknessAcceptance) {Dashing.dashPlayer(client,"Left");}
-            if (checkIfKeyIsPressedThisTick(GLFW_KEY_D) && getTickDifferenceToCurrentTick(LastTickKeyWasPressedReg.get(KeysButItsAList.indexOf(GLFW_KEY_D))) <= tickQuicknessAcceptance) {Dashing.dashPlayer(client,"Right");}
-            if (checkIfKeyIsPressedThisTick(GLFW_KEY_W) && getTickDifferenceToCurrentTick(LastTickKeyWasPressedReg.get(KeysButItsAList.indexOf(GLFW_KEY_W))) <= tickQuicknessAcceptance) {Dashing.dashPlayer(client,"Forward");}
-            if (checkIfKeyIsPressedThisTick(GLFW_KEY_S) && getTickDifferenceToCurrentTick(LastTickKeyWasPressedReg.get(KeysButItsAList.indexOf(GLFW_KEY_S))) <= tickQuicknessAcceptance) {Dashing.dashPlayer(client,"Backward");}
+            if (checkIfKeyIsPressedThisTick(GLFW_KEY_A) && getTickDifferenceToCurrentTick(LastTickKeyWasPressedReg.get(KeysButItsAList.indexOf(GLFW_KEY_A))) < tickQuicknessAcceptance) {Dashing.dashPlayer(client,"Left");}
+            if (checkIfKeyIsPressedThisTick(GLFW_KEY_D) && getTickDifferenceToCurrentTick(LastTickKeyWasPressedReg.get(KeysButItsAList.indexOf(GLFW_KEY_D))) < tickQuicknessAcceptance) {Dashing.dashPlayer(client,"Right");}
+            if (checkIfKeyIsPressedThisTick(GLFW_KEY_W) && getTickDifferenceToCurrentTick(LastTickKeyWasPressedReg.get(KeysButItsAList.indexOf(GLFW_KEY_W))) < tickQuicknessAcceptance) {} //{Dashing.dashPlayer(client,"Forward");}
+            if (checkIfKeyIsPressedThisTick(GLFW_KEY_S) && getTickDifferenceToCurrentTick(LastTickKeyWasPressedReg.get(KeysButItsAList.indexOf(GLFW_KEY_S))) < tickQuicknessAcceptance) {Dashing.dashPlayer(client,"Backward");}
         }
     }
 

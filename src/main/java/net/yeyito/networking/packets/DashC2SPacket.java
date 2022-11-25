@@ -28,7 +28,7 @@ import java.util.Objects;
 import java.util.Random;
 
 public class DashC2SPacket {
-    private static final int DASHING_PENALTY = 1;
+    private static final float DASHING_PENALTY = 0.2F;
 
     public static World getPlayerWorld(MinecraftServer server, ServerPlayerEntity player) {
         return server.getWorld(player.world.getRegistryKey());
@@ -36,16 +36,7 @@ public class DashC2SPacket {
 
     public static void receive(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
         // run on the server
-        if (player.getHungerManager().getFoodLevel() <= 0 && !player.isCreative()) {
-            player.damage(DamageSource.STARVE, DASHING_PENALTY);
-            // Add particles
-            Objects.requireNonNull(server.getWorld(player.getWorld().getRegistryKey())).spawnParticles(DustParticleEffect.DEFAULT,player.getX(),player.getY()+1,player.getZ(),10,-0.25,-0.5,-0.25,0);
-            // Add sound
-            // This doesn't work because of reasons that escape me
-            Objects.requireNonNull(server.getWorld(player.getWorld().getRegistryKey())).playSound(player,player.getBlockPos(),SoundEvents.BLOCK_SCULK_BREAK, SoundCategory.PLAYERS,1,-1);
-        } else if (!player.isCreative())
-
-        {player.getHungerManager().setFoodLevel(player.getHungerManager().getFoodLevel() - DASHING_PENALTY);}
+        player.getHungerManager().addExhaustion(DASHING_PENALTY);
 
         // Storing the tick this player dashed
         if (PlayerInfo.playerToTimeSinceLastDash.containsKey(player.getName().getString())) {
@@ -53,5 +44,7 @@ public class DashC2SPacket {
             PlayerInfo.playerToTimeSinceLastDash.put(player.getName().getString(),ServerTickEvent.getServerTickCounter());
 
         } else {MoreMovementOptions.LOGGER.error("player key not found in playerToTimeSinceLastDash");}
+
+        // Player crits an enemy, detect time since last dash if it is under 2x dashing debounce time, add bleed
     }
 }

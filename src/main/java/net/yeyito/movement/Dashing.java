@@ -11,16 +11,21 @@ import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
+import net.yeyito.event.client.KeyboardInputEvent;
 import net.yeyito.networking.PacketHandler;
 
 public class Dashing {
+    private static int timeOfLastDash = -9999;
+    public static int tickQuicknessAcceptance = 5;
+
     public static void dashPlayer(MinecraftClient client, String dashType) {
-        if (client.player != null && !client.player.isSneaking() && client.player.isOnGround() && !isScreenFocused(client)) {
+        if (client.player != null && !client.player.isSneaking() && client.player.isOnGround() && !isScreenFocused(client) && KeyboardInputEvent.getTickDifferenceToCurrentTick(timeOfLastDash) > tickQuicknessAcceptance) {
+            timeOfLastDash = KeyboardInputEvent.tickCounter;
             switch (dashType) {
-                case "Left" -> dashDirection(client,2, new Vec3d(15, 0, 0),dashType);
-                case "Right" -> dashDirection(client,2, new Vec3d(-15, 0, 0),dashType);
-                case "Forward" -> dashDirection(client,1, new Vec3d(0, 0, 15),dashType);
-                case "Backward" -> dashDirection(client,2, new Vec3d(0, 0, -15),dashType);
+                case "Left" -> dashDirection(client,1, new Vec3d(1, 0, 0),dashType);
+                case "Right" -> dashDirection(client,1, new Vec3d(-1, 0, 0),dashType);
+                case "Forward" -> dashDirection(client,1, new Vec3d(0, 0, 1),dashType);
+                case "Backward" -> dashDirection(client,1, new Vec3d(0, 0, -1),dashType);
             }
         }
     }
