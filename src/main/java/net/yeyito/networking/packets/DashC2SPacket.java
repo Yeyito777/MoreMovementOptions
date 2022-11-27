@@ -44,7 +44,5 @@ public class DashC2SPacket {
             PlayerInfo.playerToTimeSinceLastDash.put(player.getName().getString(),ServerTickEvent.getServerTickCounter());
 
         } else {MoreMovementOptions.LOGGER.error("player key not found in playerToTimeSinceLastDash");}
-
-        // Player crits an enemy, detect time since last dash if it is under 2x dashing debounce time, add bleed
     }
 }
