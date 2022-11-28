@@ -31,9 +31,6 @@ public abstract class CritBleedMixin {
 
     @Inject(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;addCritParticles(Lnet/minecraft/entity/Entity;)V"))
     public void attackInject(Entity target, CallbackInfo ci) {
-        System.out.println(PlayerInfo.playerToTimeSinceLastOnGround.get(this.getName().getString()));
-        System.out.println(PlayerInfo.playerToTimeSinceLastDash.get(this.getName().getString()));
-
         if (PlayerInfo.playerToTimeSinceLastOnGround.get(this.getName().getString()) - PlayerInfo.playerToTimeSinceLastDash.get(this.getName().getString()) <= dashTickForgiveness) {
             // Adding bleed
             if (target instanceof LivingEntity) {

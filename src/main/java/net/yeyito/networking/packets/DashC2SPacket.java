@@ -44,5 +44,12 @@ public class DashC2SPacket {
             PlayerInfo.playerToTimeSinceLastDash.put(player.getName().getString(),ServerTickEvent.getServerTickCounter());
 
         } else {MoreMovementOptions.LOGGER.error("player key not found in playerToTimeSinceLastDash");}
+
+        // Storing the dash type
+        if (PlayerInfo.playerToLastDashType.containsKey(player.getName().getString())) {
+            PlayerInfo.playerToLastDashType.remove(player.getName().getString());
+            PlayerInfo.playerToLastDashType.put(player.getName().getString(), buf.readString());
+        } else {
+            MoreMovementOptions.LOGGER.error("player key not found in playerToLastDashType");}
     }
 }
