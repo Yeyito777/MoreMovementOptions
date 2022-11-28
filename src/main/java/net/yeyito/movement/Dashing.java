@@ -2,19 +2,10 @@ package net.yeyito.movement;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.Element;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
 import net.yeyito.event.client.KeyboardInputEvent;
-import net.yeyito.more_movement_options.MoreMovementOptions;
 import net.yeyito.networking.PacketHandler;
-import net.yeyito.server.server_storage.PlayerInfo;
 
 public class Dashing {
     private static int timeOfLastDash = -9999;

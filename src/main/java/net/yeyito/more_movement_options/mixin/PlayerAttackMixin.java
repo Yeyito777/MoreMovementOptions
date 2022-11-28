@@ -1,34 +1,16 @@
 package net.yeyito.more_movement_options.mixin;
 
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.minecraft.block.Blocks;
-import net.minecraft.client.util.math.Vector3d;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
 import net.yeyito.event.server.ServerTickEvent;
-import net.yeyito.server.server_storage.PlayerInfo;
+import net.yeyito.server.server_storage.ServerPlayerInfo;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArgs;
-import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
-
-import java.util.Objects;
 
 @Mixin(LivingEntity.class)
 public abstract class PlayerAttackMixin {
@@ -38,15 +20,17 @@ public abstract class PlayerAttackMixin {
 
     @ModifyArgs(method = "takeKnockback", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;setVelocity(DDD)V"))
     private void Injected(Args args,double strength, double x, double z) {
-        if (getAttacker() != null && getAttacker() instanceof PlayerEntity) {
+        if (getAttacker() != null && !getAttacker().world.isClient && getAttacker() != null && getAttacker() instanceof PlayerEntity) {
             double knockbackTimeForgiveness = 1.33333;
 
-            int ticksSinceLastDash = ServerTickEvent.getServerTickCounter() - PlayerInfo.playerToTimeSinceLastDash.get(getAttacker().getName().getString());
+            System.out.println(ServerPlayerInfo.playerToTimeSinceLastDash.get(getAttacker().getName().getString()));
+            System.out.println("PlayerAttackMixin");
+            int ticksSinceLastDash = ServerTickEvent.getServerTickCounter() - ServerPlayerInfo.playerToTimeSinceLastDash.get(getAttacker().getName().getString());
             ticksSinceLastDash = (int) Math.floor((double) ticksSinceLastDash/knockbackTimeForgiveness);
             if (ticksSinceLastDash > 10) {return;}
             if (ticksSinceLastDash == 0) {ticksSinceLastDash = 1;}
 
-            String dashType = PlayerInfo.playerToLastDashType.get(getAttacker().getName().getString());
+            String dashType = ServerPlayerInfo.playerToLastDashType.get(getAttacker().getName().getString());
 
             Vec3f forward = new Vec3f((float) getAttacker().getRotationVecClient().getX(),0F,(float) getAttacker().getRotationVecClient().getZ());
             Vec3f left = new Vec3f(forward.getZ(),forward.getY(),-forward.getX());

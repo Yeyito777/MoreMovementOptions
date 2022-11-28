@@ -39,6 +39,7 @@ public class Bleeding extends StatusEffect {
 
     @Override
     public void applyUpdateEffect(LivingEntity entity, int amplifier) {
+        if (entity.getWorld().isClient) {return;}
         tickStart = ServerTickEvent.getServerTickCounter();
 
         entity.damage(new DamageSource("Bleed"),0.001F);

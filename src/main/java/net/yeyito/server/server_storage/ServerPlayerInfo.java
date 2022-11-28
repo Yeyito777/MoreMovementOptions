@@ -6,10 +6,10 @@ import net.minecraft.server.MinecraftServer;
 
 import java.util.*;
 
-public class PlayerInfo {
+public class ServerPlayerInfo {
     public static HashMap<String, Integer> playerToTimeSinceLastDash = new HashMap<String,Integer>();
     public static HashMap<String, Integer> playerToTimeSinceLastOnGround = new HashMap<String,Integer>();
-    public static HashMap<String, String> playerToLastDashType = new HashMap<>();
+    public static HashMap<String, String> playerToLastDashType = new HashMap<String,String>();
 
     public static void playerMapUpdate(MinecraftServer server) {
         for (String playerName: server.getPlayerNames()) {
@@ -22,7 +22,7 @@ public class PlayerInfo {
             }
 
             if (!playerToLastDashType.containsKey(playerName)) {
-                playerToLastDashType.put(playerName,"null");
+                playerToLastDashType.put(playerName,"Left");
             }
         }
     }

@@ -3,10 +3,10 @@
   "id": "more_movement_options",
   "version": "${version}",
 
-  "name": "Example Mod",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "name": "More Movement Options",
+  "description": "Adding dashing and climbing to MC!",
   "authors": [
-    "Me!"
+    "Yeyito777"
   ],
   "contact": {
     "homepage": "https://fabricmc.net/",

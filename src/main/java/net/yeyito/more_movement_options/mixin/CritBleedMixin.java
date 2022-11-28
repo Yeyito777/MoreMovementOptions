@@ -1,19 +1,11 @@
 package net.yeyito.more_movement_options.mixin;
 
-import net.minecraft.client.sound.Sound;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.event.GameEvent;
-import net.yeyito.more_movement_options.MoreMovementOptions;
-import net.yeyito.server.server_storage.PlayerInfo;
+import net.yeyito.server.server_storage.ServerPlayerInfo;
 import net.yeyito.status_effect.StatusEffects;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -31,7 +23,9 @@ public abstract class CritBleedMixin {
 
     @Inject(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;addCritParticles(Lnet/minecraft/entity/Entity;)V"))
     public void attackInject(Entity target, CallbackInfo ci) {
-        if (PlayerInfo.playerToTimeSinceLastOnGround.get(this.getName().getString()) - PlayerInfo.playerToTimeSinceLastDash.get(this.getName().getString()) <= dashTickForgiveness) {
+        if (!target.getWorld().isClient && ServerPlayerInfo.playerToTimeSinceLastOnGround.get(this.getName().getString()) - ServerPlayerInfo.playerToTimeSinceLastDash.get(this.getName().getString()) <= dashTickForgiveness) {
+            System.out.println(ServerPlayerInfo.playerToTimeSinceLastOnGround.get(this.getName().getString()));
+            System.out.println("CritBleedMixin");
             // Adding bleed
             if (target instanceof LivingEntity) {
                 ((LivingEntity) target).addStatusEffect(new StatusEffectInstance(StatusEffects.BLEEDING,BLEED_DURATION*20,0));
