@@ -15,7 +15,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PlayerEntity.class)
 public abstract class CritBleedMixin {
-    private static final int BLEED_DURATION = 5;
+    private static final int BLEED_DURATION = 7;
+    private static final int BLEED_AMPLIFIER = 0;
 
     @Shadow public abstract Text getName();
 
@@ -23,14 +24,19 @@ public abstract class CritBleedMixin {
 
     @Inject(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;addCritParticles(Lnet/minecraft/entity/Entity;)V"))
     public void attackInject(Entity target, CallbackInfo ci) {
+        boolean addOnClient = false;
         if (!target.getWorld().isClient && ServerPlayerInfo.playerToTimeSinceLastOnGround.get(this.getName().getString()) - ServerPlayerInfo.playerToTimeSinceLastDash.get(this.getName().getString()) <= dashTickForgiveness) {
-            System.out.println(ServerPlayerInfo.playerToTimeSinceLastOnGround.get(this.getName().getString()));
-            System.out.println("CritBleedMixin");
             // Adding bleed
             if (target instanceof LivingEntity) {
-                ((LivingEntity) target).addStatusEffect(new StatusEffectInstance(StatusEffects.BLEEDING,BLEED_DURATION*20,0));
-                ((LivingEntity) target).addStatusEffect(new StatusEffectInstance(net.minecraft.entity.effect.StatusEffects.SLOWNESS,BLEED_DURATION*20,0));
+                addOnClient = true;
+                ((LivingEntity) target).addStatusEffect(new StatusEffectInstance(StatusEffects.BLEEDING,BLEED_DURATION*20,BLEED_AMPLIFIER,false,false,true));
+                ((LivingEntity) target).addStatusEffect(new StatusEffectInstance(net.minecraft.entity.effect.StatusEffects.SLOWNESS,BLEED_DURATION*20,BLEED_AMPLIFIER,false,false,false));
             }
+        }
+
+        if (addOnClient && target.getWorld().isClient) {
+            ((LivingEntity) target).addStatusEffect(new StatusEffectInstance(StatusEffects.BLEEDING,BLEED_DURATION*20,BLEED_AMPLIFIER,false,false,true));
+            ((LivingEntity) target).addStatusEffect(new StatusEffectInstance(net.minecraft.entity.effect.StatusEffects.SLOWNESS,BLEED_DURATION*20,BLEED_AMPLIFIER,false,false,false));
         }
     }
 }

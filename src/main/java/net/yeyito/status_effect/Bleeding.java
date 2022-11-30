@@ -1,5 +1,10 @@
 package net.yeyito.status_effect;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.block.Blocks;
+import net.minecraft.client.particle.BlockDustParticle;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.attribute.EntityAttribute;
@@ -10,8 +15,13 @@ import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.particle.BlockStateParticleEffect;
+import net.minecraft.particle.ParticleEffect;
+import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.math.BlockPos;
 import net.yeyito.event.server.ServerTickEvent;
 
 import java.awt.*;
@@ -39,13 +49,18 @@ public class Bleeding extends StatusEffect {
 
     @Override
     public void applyUpdateEffect(LivingEntity entity, int amplifier) {
-        if (entity.getWorld().isClient) {return;}
-        tickStart = ServerTickEvent.getServerTickCounter();
+        if (entity.getWorld().isClient) {
+            entity.playSound(SoundEvents.BLOCK_SCULK_BREAK, 1, 0);
+        }
 
-        entity.damage(new DamageSource("Bleed"),0.001F);
-        entity.setHealth(entity.getHealth()-1.0F);
+        if (!entity.getWorld().isClient) {
+            tickStart = ServerTickEvent.getServerTickCounter();
+            entity.getWorld().addBlockBreakParticles(new BlockPos(entity.getPos().add(0,1,0)), Blocks.REDSTONE_BLOCK.getDefaultState());
+            entity.damage(new DamageSource("Bleed"), 0.001F);
+            entity.setHealth(entity.getHealth() - 1.0F);
 
-        entity.playSound(SoundEvents.BLOCK_SCULK_BREAK,1,0);
-        //entity.world.playSound(entity.getX(),entity.getY()+1,entity.getZ(), SoundEvents.BLOCK_SCULK_BREAK, SoundCategory.PLAYERS,1,1,true);
+            entity.playSound(SoundEvents.BLOCK_SCULK_BREAK, 1, 0);
+            ((ServerWorld) entity.getWorld()).spawnParticles(new BlockStateParticleEffect(ParticleTypes.BLOCK,Blocks.REDSTONE_BLOCK.getDefaultState()),entity.getX(),entity.getY()+1,entity.getZ(),25,0,0,0,0);
+        }
     }
 }
