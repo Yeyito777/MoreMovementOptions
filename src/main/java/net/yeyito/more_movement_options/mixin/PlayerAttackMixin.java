@@ -23,8 +23,6 @@ public abstract class PlayerAttackMixin {
         if (getAttacker() != null && !getAttacker().world.isClient && getAttacker() != null && getAttacker() instanceof PlayerEntity) {
             double knockbackTimeForgiveness = 1.33333;
 
-            System.out.println(ServerPlayerInfo.playerToTimeSinceLastDash.get(getAttacker().getName().getString()));
-            System.out.println("PlayerAttackMixin");
             int ticksSinceLastDash = ServerTickEvent.getServerTickCounter() - ServerPlayerInfo.playerToTimeSinceLastDash.get(getAttacker().getName().getString());
             ticksSinceLastDash = (int) Math.floor((double) ticksSinceLastDash/knockbackTimeForgiveness);
             if (ticksSinceLastDash > 10) {return;}

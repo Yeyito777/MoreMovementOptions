@@ -58,11 +58,8 @@ public class Bleeding extends StatusEffect {
             entity.getWorld().addBlockBreakParticles(new BlockPos(entity.getPos().add(0,1,0)), Blocks.REDSTONE_BLOCK.getDefaultState());
 
             entity.damage(DamageSources.BLEED, 1.0F);
-
-            //entity.playSound(SoundEvents.BLOCK_SCULK_BREAK, 1, 0);
-            //entity.getWorld().addBlockBreakParticles(new BlockPos(entity.getPos()),Blocks.REDSTONE_BLOCK.getDefaultState());
-
-            //Objects.requireNonNull(ServerTickEvent.getCurrentServer().getWorld(entity.getWorld().getRegistryKey())).spawnParticles(new BlockStateParticleEffect(ParticleTypes.BLOCK,Blocks.REDSTONE_BLOCK.getDefaultState()),entity.getX(),entity.getY()+1,entity.getZ(),25,0,0,0,0);
+        } else {
+            entity.playSound(SoundEvents.BLOCK_SCULK_BREAK, 2, -1);
         }
     }
 }

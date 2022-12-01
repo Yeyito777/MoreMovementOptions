@@ -23,6 +23,10 @@ public abstract class ServerWorldEventMixin {
 
     @Inject(method = "emitGameEvent",at = @At("HEAD"))
     private void emitGameEventInject(GameEvent event, Vec3d emitterPos, GameEvent.Emitter emitter, CallbackInfo ci) {
+        if (event == GameEvent.ENTITY_DAMAGE) {
+            assert emitter.sourceEntity() != null;
+            System.out.println(emitter.sourceEntity().getName().getString() + " was damaged");
+        }
         if (event == GameEvent.ENTITY_DAMAGE && emitter.sourceEntity() instanceof LivingEntity entity && entity.getActiveStatusEffects().get(StatusEffects.BLEEDING) != null) {
             System.out.println(entity.getName().getString() + " bleed hit");
 
