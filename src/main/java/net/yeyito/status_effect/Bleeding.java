@@ -22,11 +22,15 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.world.event.GameEvent;
+import net.yeyito.damage_source.DamageSources;
 import net.yeyito.event.server.ServerTickEvent;
 
 import java.awt.*;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Objects;
 
 public class Bleeding extends StatusEffect {
     int tickStart = 0;
@@ -42,25 +46,23 @@ public class Bleeding extends StatusEffect {
 
     @Override
     public boolean canApplyUpdateEffect(int duration, int amplifier) {
-        if (amplifier > 10) {amplifier = 10;}
+        if (amplifier > 10 || amplifier < 0) {amplifier = 10;}
 
         return (ServerTickEvent.getServerTickCounter() - tickStart) % (20 / (amplifier + 1)) == 0;
     }
 
     @Override
     public void applyUpdateEffect(LivingEntity entity, int amplifier) {
-        if (entity.getWorld().isClient) {
-            entity.playSound(SoundEvents.BLOCK_SCULK_BREAK, 1, 0);
-        }
-
         if (!entity.getWorld().isClient) {
             tickStart = ServerTickEvent.getServerTickCounter();
             entity.getWorld().addBlockBreakParticles(new BlockPos(entity.getPos().add(0,1,0)), Blocks.REDSTONE_BLOCK.getDefaultState());
-            entity.damage(new DamageSource("Bleed"), 0.001F);
-            entity.setHealth(entity.getHealth() - 1.0F);
 
-            entity.playSound(SoundEvents.BLOCK_SCULK_BREAK, 1, 0);
-            ((ServerWorld) entity.getWorld()).spawnParticles(new BlockStateParticleEffect(ParticleTypes.BLOCK,Blocks.REDSTONE_BLOCK.getDefaultState()),entity.getX(),entity.getY()+1,entity.getZ(),25,0,0,0,0);
+            entity.damage(DamageSources.BLEED, 1.0F);
+
+            //entity.playSound(SoundEvents.BLOCK_SCULK_BREAK, 1, 0);
+            //entity.getWorld().addBlockBreakParticles(new BlockPos(entity.getPos()),Blocks.REDSTONE_BLOCK.getDefaultState());
+
+            //Objects.requireNonNull(ServerTickEvent.getCurrentServer().getWorld(entity.getWorld().getRegistryKey())).spawnParticles(new BlockStateParticleEffect(ParticleTypes.BLOCK,Blocks.REDSTONE_BLOCK.getDefaultState()),entity.getX(),entity.getY()+1,entity.getZ(),25,0,0,0,0);
         }
     }
 }
