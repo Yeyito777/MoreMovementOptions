@@ -1,0 +1,12 @@
+{
+  "dash" : {
+    "subtitle": "subtitles.more_movement_options.dash",
+    "sounds": [
+      "more_movement_options:dash",
+      "more_movement_options:dash2",
+      "more_movement_options:dash3",
+      "more_movement_options:dash4",
+      "more_movement_options:dash5"
+    ]
+  }
+}

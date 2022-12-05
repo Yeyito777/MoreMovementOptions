@@ -1,5 +1,8 @@
 {
   "death.attack.bleed.player": "%1$s bled to death",
   "death.attack.bleed": "%1$s bled to death",
-  "effect.more_movement_options.bleed": "Bleed"
+
+  "effect.more_movement_options.bleed": "Bleed",
+
+  "subtitles.more_movement_options.dash": "Swoosh"
 }

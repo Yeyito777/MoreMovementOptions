@@ -1,16 +1,18 @@
 package net.yeyito.event.client;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.text.Text;
+import net.minecraft.util.BlockRotation;
 import net.yeyito.movement.Dashing;
 import org.lwjgl.glfw.GLFW;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
+@Environment(EnvType.CLIENT)
 public class KeyboardInputEvent extends InputUtil {
     public static int tickCounter = 0;
     public static int tickQuicknessAcceptance = 5; // The higher the number the more forgiving, it's in ticks.
@@ -21,15 +23,15 @@ public class KeyboardInputEvent extends InputUtil {
     public static List<Integer> LastTickKeyWasPressedReg = new ArrayList<>();
     public static List<Integer> LastTickKeyWasHeldReg = new ArrayList<>();
 
+
     public static void codeRanBeforeKeyUpdates(MinecraftClient client) {
-        if (client != null) {
+        if (client != null && client.player != null && client.getCameraEntity() != null) {
             if (checkIfKeyIsPressedThisTick(GLFW_KEY_A) && getTickDifferenceToCurrentTick(LastTickKeyWasPressedReg.get(KeysButItsAList.indexOf(GLFW_KEY_A))) < tickQuicknessAcceptance) {Dashing.dashPlayer(client,"Left");}
             if (checkIfKeyIsPressedThisTick(GLFW_KEY_D) && getTickDifferenceToCurrentTick(LastTickKeyWasPressedReg.get(KeysButItsAList.indexOf(GLFW_KEY_D))) < tickQuicknessAcceptance) {Dashing.dashPlayer(client,"Right");}
-            if (checkIfKeyIsPressedThisTick(GLFW_KEY_W) && getTickDifferenceToCurrentTick(LastTickKeyWasPressedReg.get(KeysButItsAList.indexOf(GLFW_KEY_W))) < tickQuicknessAcceptance) {} //{Dashing.dashPlayer(client,"Forward");}
+            if (checkIfKeyIsPressedThisTick(GLFW_KEY_W) && getTickDifferenceToCurrentTick(LastTickKeyWasPressedReg.get(KeysButItsAList.indexOf(GLFW_KEY_W))) < tickQuicknessAcceptance) {Dashing.dashPlayer(client,"Forward");}
             if (checkIfKeyIsPressedThisTick(GLFW_KEY_S) && getTickDifferenceToCurrentTick(LastTickKeyWasPressedReg.get(KeysButItsAList.indexOf(GLFW_KEY_S))) < tickQuicknessAcceptance) {Dashing.dashPlayer(client,"Backward");}
         }
     }
-
 
     public static void keyInputDetection() {
         keyRegistrySetup();

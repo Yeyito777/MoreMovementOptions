@@ -10,6 +10,7 @@
     "ServerWorldEventMixin"
   ],
   "client": [
+    "GameRendererRotationMixin"
   ],
   "server": [
   ],
