@@ -14,6 +14,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 import net.yeyito.client.AnimationTypes;
 import net.yeyito.client.Camera;
+import net.yeyito.client.renderer.Renderer;
 import net.yeyito.event.client.KeyboardInputEvent;
 import net.yeyito.networking.PacketHandler;
 import net.yeyito.sounds.ModSounds;
@@ -37,9 +38,10 @@ public class Dashing {
     }
 
     public static void dashDirection(MinecraftClient client, int speed, Vec3d direction,String dashType) {
+        // We already tested for client.player previously
         assert client.player != null;
-        //client.player.getWorld().playSoundFromEntity(null,client.player,ModSounds.DASH,SoundCategory.PLAYERS,1,1);
-        //client.player.playSound(ModSounds.DASH,SoundCategory.PLAYERS,1,1);
+
+        // Updating the velocity (client) and sending a dashing packet
         client.player.updateVelocity(speed,direction);
         ClientPlayNetworking.send(PacketHandler.DASHING_ID, PacketByteBufs.create().writeString(dashType));
     }

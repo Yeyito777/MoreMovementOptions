@@ -4,6 +4,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.yeyito.server.server_storage.ServerPlayerInfo;
 import net.yeyito.status_effect.StatusEffects;
@@ -31,12 +35,15 @@ public abstract class CritBleedMixin {
                 addOnClient = true;
                 ((LivingEntity) target).addStatusEffect(new StatusEffectInstance(StatusEffects.BLEEDING,BLEED_DURATION*20,BLEED_AMPLIFIER,false,false,true));
                 ((LivingEntity) target).addStatusEffect(new StatusEffectInstance(net.minecraft.entity.effect.StatusEffects.SLOWNESS,BLEED_DURATION*20,BLEED_AMPLIFIER,false,false,false));
+                ((ServerWorld) target.getWorld()).playSound(null,target.getX(),target.getY()+1,target.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, SoundCategory.PLAYERS,1,0);
+                //((ServerWorld) target.getWorld()).spawnParticles(ParticleTypes.LARGE_SMOKE,target.getX(),target.getY()+1,target.getZ(),7,0,0,0,0.1);
             }
         }
 
         if (addOnClient && target.getWorld().isClient) {
             ((LivingEntity) target).addStatusEffect(new StatusEffectInstance(StatusEffects.BLEEDING,BLEED_DURATION*20,BLEED_AMPLIFIER,false,false,true));
             ((LivingEntity) target).addStatusEffect(new StatusEffectInstance(net.minecraft.entity.effect.StatusEffects.SLOWNESS,BLEED_DURATION*20,BLEED_AMPLIFIER,false,false,false));
+            // prevent from adding normal crit particles
         }
     }
 }

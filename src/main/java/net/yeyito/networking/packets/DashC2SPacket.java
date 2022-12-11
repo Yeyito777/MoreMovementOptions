@@ -1,12 +1,16 @@
 package net.yeyito.networking.packets;
 
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
+import net.minecraft.block.Blocks;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.particle.BlockStateParticleEffect;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.World;
 import net.yeyito.event.server.ServerTickEvent;
@@ -30,8 +34,8 @@ public class DashC2SPacket {
             player.getHungerManager().addExhaustion(DASHING_PENALTY);
         }
 
-        player.playSound(ModSounds.DASH,SoundCategory.PLAYERS,0,new Random().nextFloat(-1,1));
-        //Objects.requireNonNull(server.getWorld(player.getWorld().getRegistryKey())).playSoundFromEntity(player,player,ModSounds.DASH,SoundCategory.PLAYERS,0,new Random().nextFloat(-1,1),new Random().nextLong(Long.MIN_VALUE,Long.MAX_VALUE));
+        Objects.requireNonNull(server.getWorld(player.getWorld().getRegistryKey())).playSound(null,new BlockPos(player.getPos()),ModSounds.DASH,SoundCategory.PLAYERS,1,1);
+        Objects.requireNonNull(server.getWorld(player.getWorld().getRegistryKey())).spawnParticles(ParticleTypes.POOF,player.getX(),player.getY(),player.getZ(),15,0,0,0,0.1);
 
         // Storing the tick this player dashed
         if (ServerPlayerInfo.playerToTimeSinceLastDash.containsKey(player.getName().getString())) {
