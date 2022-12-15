@@ -5,24 +5,21 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.sound.Sound;
-import net.minecraft.client.sound.SoundInstance;
-import net.minecraft.client.sound.SoundManager;
-import net.minecraft.client.sound.WeightedSoundSet;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 import net.yeyito.client.AnimationTypes;
 import net.yeyito.client.Camera;
-import net.yeyito.client.renderer.Renderer;
+import net.yeyito.client.renderer.HudRenderListener;
 import net.yeyito.event.client.KeyboardInputEvent;
+import net.yeyito.event.client.PlayerInfoEvent;
+import net.yeyito.more_movement_options.mixin.CritBleedMixin;
 import net.yeyito.networking.PacketHandler;
-import net.yeyito.sounds.ModSounds;
-import org.jetbrains.annotations.Nullable;
+import net.yeyito.server.server_storage.ServerPlayerInfo;
+
+import static net.yeyito.storage.client_and_server.DashingInfo.dashTickForgiveness;
 
 @Environment(EnvType.CLIENT)
 public class Dashing {
-    private static int timeOfLastDash = -9999;
+    public static int timeOfLastDash = -9999;
     public static int tickQuicknessAcceptance = 5;
 
     public static void dashPlayer(MinecraftClient client, String dashType) {
@@ -40,7 +37,6 @@ public class Dashing {
     public static void dashDirection(MinecraftClient client, int speed, Vec3d direction,String dashType) {
         // We already tested for client.player previously
         assert client.player != null;
-
         // Updating the velocity (client) and sending a dashing packet
         client.player.updateVelocity(speed,direction);
         ClientPlayNetworking.send(PacketHandler.DASHING_ID, PacketByteBufs.create().writeString(dashType));

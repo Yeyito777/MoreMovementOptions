@@ -18,7 +18,7 @@ import static net.yeyito.status_effect.StatusEffects.BLEEDING;
 public class MoreMovementOptions implements ModInitializer {
 	public static final String MOD_ID = "more_movement_options";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-	public static final String VERSION = "v0.0.1";
+	public static final String VERSION = "0.0.4a";
 
 	@Override
 	public void onInitialize() {
