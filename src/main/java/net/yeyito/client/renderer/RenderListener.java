@@ -11,32 +11,41 @@ import net.minecraft.util.Identifier;
 import net.yeyito.client.textures.Textures;
 import net.yeyito.more_movement_options.MoreMovementOptions;
 
-public class RenderListener implements ScreenEvents.AfterRender,ScreenEvents.BeforeRender,ScreenEvents.BeforeTick,ScreenEvents.AfterTick,ScreenEvents.Remove {
+public class RenderListener implements ScreenEvents.AfterRender,ScreenEvents.BeforeRender,ScreenEvents.BeforeTick,ScreenEvents.AfterTick,ScreenEvents.Remove,AutoCloseable {
+    public boolean isSubscribed = false;
+    public boolean isClosed = false;
+
     @Override
     public void afterRender(Screen screen, MatrixStack matrices, int mouseX, int mouseY, float tickDelta) {
-
+        if (isClosed) {return;}
     }
 
     @Override
     public void afterTick(Screen screen) {
-
+        if (isClosed) {return;}
     }
 
     @Override
     public void beforeRender(Screen screen, MatrixStack matrices, int mouseX, int mouseY, float tickDelta) {
-
+        if (isClosed) {return;}
     }
 
     @Override
     public void beforeTick(Screen screen) {
-
+        if (isClosed) {return;}
     }
 
     @Override
     public void onRemove(Screen screen) {
-
+        if (isClosed) {return;}
     }
-    public static void onInit() {
 
+    public void subscribe() {
+        this.isSubscribed = true;
+    }
+
+    @Override
+    public void close() throws Exception {
+        this.isClosed = true;
     }
 }

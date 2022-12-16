@@ -6,7 +6,6 @@ import java.math.BigInteger;
 public class Animations {
     public static float animFloat(float startKeyFrame,float endKeyframe, double timeStep, double animationTime, int animationType) {
         if (timeStep >= animationTime) {return  endKeyframe;}
-
         switch (animationType) {
             case AnimationTypes.CUBIC -> {return (float) (startKeyFrame + (3 * Math.pow(timeStep / animationTime, 2) - 2 * Math.pow(timeStep / animationTime, 3)) * (endKeyframe - startKeyFrame));}
             case AnimationTypes.QUADRATIC -> {return (float) (startKeyFrame + (Math.pow(timeStep / animationTime,2)* (endKeyframe - startKeyFrame)));}

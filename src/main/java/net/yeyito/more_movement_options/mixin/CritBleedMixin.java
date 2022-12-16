@@ -1,5 +1,8 @@
 package net.yeyito.more_movement_options.mixin;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -21,9 +24,12 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.struct.InjectionInfo;
 
-import static net.yeyito.storage.client_and_server.DashingInfo.dashTickForgiveness;
-import static net.yeyito.storage.client_and_server.DashingInfo.dashTickMaxTime;
+import java.util.HashSet;
+import java.util.Set;
+
+import static net.yeyito.storage.client_and_server.DashingInfo.*;
 
 @Mixin(PlayerEntity.class)
 public abstract class CritBleedMixin {
@@ -35,6 +41,7 @@ public abstract class CritBleedMixin {
     @Inject(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;addCritParticles(Lnet/minecraft/entity/Entity;)V"))
     public void attackInject(Entity target, CallbackInfo ci) {
         boolean addOnClient = false;
+        // SERVER SIDE
         if (!target.getWorld().isClient && ServerPlayerInfo.playerToTimeSinceLastOnGround.get(this.getName().getString()) - ServerPlayerInfo.playerToTimeSinceLastDash.get(this.getName().getString()) <= dashTickForgiveness &&
                 ServerTickEvent.getServerTickCounter() - ServerPlayerInfo.playerToTimeSinceLastOnGround.get(this.getName().getString()) <= dashTickMaxTime) {
             // Adding bleed
@@ -44,14 +51,16 @@ public abstract class CritBleedMixin {
                 ((LivingEntity) target).addStatusEffect(new StatusEffectInstance(net.minecraft.entity.effect.StatusEffects.SLOWNESS,BLEED_DURATION*20,BLEED_AMPLIFIER,false,false,false));
                 ((ServerWorld) target.getWorld()).playSound(null,target.getX(),target.getY()+1,target.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, SoundCategory.PLAYERS,1,0);
                 //((ServerWorld) target.getWorld()).spawnParticles(ParticleTypes.LARGE_SMOKE,target.getX(),target.getY()+1,target.getZ(),7,0,0,0,0.1);
+
+                critIDs.add(target.getId());
             }
         }
-
+        // CLIENT SIDE
         if (addOnClient && target.getWorld().isClient) {
             ((LivingEntity) target).addStatusEffect(new StatusEffectInstance(StatusEffects.BLEEDING,BLEED_DURATION*20,BLEED_AMPLIFIER,false,false,true));
             ((LivingEntity) target).addStatusEffect(new StatusEffectInstance(net.minecraft.entity.effect.StatusEffects.SLOWNESS,BLEED_DURATION*20,BLEED_AMPLIFIER,false,false,false));
-            HudRenderListener.shouldRenderCritBleedCrosshair = false;
-            // prevent from adding normal crit particles
+
+            critIDs.add(target.getId());
         }
     }
 }
