@@ -12,19 +12,20 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 import static net.yeyito.event.client.PlayerInfoEvent.player;
 
 @Environment(EnvType.CLIENT)
 @Mixin(InGameHud.class)
 public abstract class HardcoreHeartsMixin {
-    @ModifyVariable(method = "renderHealthBar",at = @At("STORE"),name = "i")
-    private int injected(int value) {
-        if (player.hasStatusEffect(StatusEffects.BLEEDING)) {
-            return 9*5;
+    @ModifyArgs(method = "renderHealthBar",at = @At(value = "INVOKE",target = "Lnet/minecraft/client/gui/hud/InGameHud;drawHeart(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/gui/hud/InGameHud$HeartType;IIIZZ)V"))
+    private void modifyArgs(Args args) {
+        if (player != null && player.hasStatusEffect(StatusEffects.BLEEDING) && args.get(4).equals(0)) {
+            args.set(4,9*5);
         }
-        return 9 * (player.world.getLevelProperties().isHardcore() ? 5 : 0);
     }
 }
