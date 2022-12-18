@@ -1,0 +1,13 @@
+{
+  "Bleeding_Enabled": true,
+  "Sounds_Volume": 1.0,
+  "Dashing": {
+    "Forward_Strength": 1.0,
+    "Backward_Strength": 1.0,
+    "Right_Strength": 1.0,
+    "Left_Strength": 1.0,
+    "Hunger_Penalty": 1.0,
+    "Double_Press_Detection_Quickness": 1.0,
+    "Dash_Jump_Bleed_Quickness": 1.0
+  }
+}
