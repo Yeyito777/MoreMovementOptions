@@ -4,9 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.util.Window;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.GameMode;
@@ -16,7 +14,7 @@ import net.yeyito.client.textures.Textures;
 
 import static net.yeyito.client.renderer.HudRenderListener.crosshairColor;
 import static net.yeyito.client.renderer.HudRenderListener.shouldRenderCritBleedCrosshair;
-import static net.yeyito.client.renderer.renderCrosshair.renderCritBleedCrosshair;
+import static net.yeyito.client.renderer.RenderCrosshair.renderCritBleedCrosshair;
 
 public class HudRenderListener implements HudRenderCallback,AutoCloseable {
     public static boolean shouldRenderCritBleedCrosshair = false;
@@ -41,7 +39,7 @@ public class HudRenderListener implements HudRenderCallback,AutoCloseable {
 }
 
 // Crit Bleed Crosshair Rendering Madness
-class renderCrosshair {
+class RenderCrosshair {
     public static boolean shouldRenderCriBleedCrosshairLastTick = false;
     public static double timeWhenShouldRenderCritBleedCrosshairUpdate = -1;
     public static float transparencyGoal = 1.0f;

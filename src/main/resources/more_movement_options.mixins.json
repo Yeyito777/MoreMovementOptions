@@ -11,9 +11,11 @@
     "ServerWorldEventMixin"
   ],
   "client": [
+    "BleedCritParticlesMixin",
     "BleedCrosshairDisablerMixin",
     "CritParticlesDisablerMixinClient",
     "GameRendererRotationMixin",
+    "HardcoreHeartsMixin",
     "SubscribeScreenEventsMixin"
   ],
   "server": [

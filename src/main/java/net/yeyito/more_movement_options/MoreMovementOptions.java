@@ -8,6 +8,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.yeyito.event.server.ServerTickEvent;
 import net.yeyito.networking.PacketHandler;
+import net.yeyito.particle.Particles;
 import net.yeyito.sounds.ModSounds;
 import net.yeyito.status_effect.Bleeding;
 import org.slf4j.Logger;
@@ -29,5 +30,6 @@ public class MoreMovementOptions implements ModInitializer {
 		ModSounds.register();
 
 		Registry.register(Registry.STATUS_EFFECT, new Identifier("more_movement_options", "bleed"), BLEEDING);
+		Particles.registerParticles();
 	}
 }

@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.yeyito.event.client.KeyboardInputEvent;
 import net.yeyito.event.client.PlayerInfoEvent;
 import net.yeyito.networking.PacketHandler;
+import net.yeyito.particle.Particles;
 
 import static net.yeyito.client.renderer.SubscribeScreenEvents.hudRenderListener;
 
@@ -15,5 +16,6 @@ public class MoreMovementOptionsClient implements ClientModInitializer {
         PlayerInfoEvent.register();
 
         PacketHandler.registerS2CPackets();
+        Particles.clientRegisterParticles();
     }
 }

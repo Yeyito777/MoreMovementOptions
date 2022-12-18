@@ -4,6 +4,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -18,6 +19,7 @@ public class CritParticlesDisablerMixinClient {
     private void addCritParticlesInject(Entity target, CallbackInfo ci) {
         if (critIDs.contains(target.getId())) {
             critIDs.remove(target.getId());
+            //this.client.particleManager.addEmitter(target, ParticleTypes.CRIT);
             ci.cancel();
         }
     }
